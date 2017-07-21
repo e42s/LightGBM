@@ -1,11 +1,21 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.2)
 
-if(APPLE)
-    SET(CMAKE_CXX_COMPILER "g++-7")
-    SET(CMAKE_C_COMPILER "gcc-7")
+PROJECT(lightgbm CXX)
+
+SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED On)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.2")
+    message(FATAL_ERROR "Insufficient gcc version")
+  endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.8")
+    message(FATAL_ERROR "Insufficient Clang version")
+  endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    message(FATAL_ERROR "AppleClang wasn't supported. Please see https://github.com/Microsoft/LightGBM/wiki/Installation-Guide#osx")
 endif()
-
-PROJECT(lightgbm)
 
 OPTION(USE_MPI "MPI based parallel learning" OFF)
 OPTION(USE_OPENMP "Enable OpenMP" ON)
